@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
+//components
+import { MainHeader } from "@/components/header";
 
 
 export const metadata: Metadata = {
@@ -20,6 +22,7 @@ export default function RootLayout({
       <body
         className={`antialiased`}
       >
+        <MainHeader/>
         {children}
       </body>
     </html>
