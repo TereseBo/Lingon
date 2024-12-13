@@ -8,7 +8,7 @@ export async function GET(
     console.log(req)
     try {
         await dbConnect()
-        const dbResponse:Pet[] = await petModel.find({name:"Bernt"});
+        const dbResponse:Pet[] = await petModel.find({});
 
         if (!dbResponse) {
             return NextResponse.json(null, { status: 503 });
