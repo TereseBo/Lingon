@@ -1,16 +1,16 @@
-import mongoose from "mongoose";
-declare global {
+import mongoose, { Connection } from "mongoose";
+/* declare global {
   var mongoose: any; // This must be a `var` and not a `let / const`
-}
+} */
 
-let cached = global.mongoose;
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
+let cachedConnection: Connection | null = null;
+
 
 async function dbConnect() {
   const MONGODB_URI = process.env.MONGODB_URI!;
+
+
 
   if (!MONGODB_URI) {
     console.log("No DB URI")
@@ -18,28 +18,31 @@ async function dbConnect() {
       "Please define the MONGODB_URI environment variable inside .env.local",
     );
   }
-
-  if (cached.conn) {
-    console.log("Connection was cached")
-    return cached.conn;
+  // If a cached connection exists, return it
+  if (cachedConnection) {
+    console.log("Using cached db connection");
+    return cachedConnection;
   }
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-      dbName:"lingon"
-    };
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
-    });
-  }
+  const options = {
+    bufferCommands: false,
+    dbName: "lingon"
+  };
   try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    throw e;
+    // If no cached connection exists, establish a new connection to MongoDB
+    const cnx = await mongoose.connect(MONGODB_URI, options);
+    // Cache the connection for future use
+    cachedConnection = cnx.connection;
+    // Log message indicating a new MongoDB connection is established
+    console.log("New mongodb connection established");
+    // Return the newly established connection
+    return cachedConnection;
+  } catch (error) {
+    // If an error occurs during connection, log the error and throw it
+    console.log("Error when connecting to DB")
+    console.log(error);
+    throw error;
   }
 
-  return cached.conn;
 }
 
 export default dbConnect;
