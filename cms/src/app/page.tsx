@@ -9,7 +9,6 @@ export default function Home() {
             const apiRes = await fetch(`/api`, {
                 method: "GET",
             });
-            console.log(apiRes)
 
             if (apiRes.ok) {
                 const data = await apiRes.json(); // Parse JSON data */
@@ -17,6 +16,7 @@ export default function Home() {
                 setPetResult(data); // Update state with parsed data
             }
         } catch (error) {
+            //TODO: Handle error
             console.log(error);
         }
     }
