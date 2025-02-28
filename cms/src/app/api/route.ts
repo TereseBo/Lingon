@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/database/dbConnect";
-import petModel,{Pet} from "@/database/models/Pet";
+import Class from "@/database/models/Class";
 
 
 export async function GET(
@@ -8,7 +8,7 @@ export async function GET(
     console.log(req)
     try {
         await dbConnect()
-        const dbResponse:Pet[] = await petModel.find({});
+        const dbResponse: typeof Class[] = await Class.find({});
 
         if (!dbResponse) {
             return NextResponse.json(null, { status: 503 });
