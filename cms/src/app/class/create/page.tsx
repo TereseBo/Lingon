@@ -4,6 +4,7 @@ import  { Class }  from "@/database/models/Class"
 import { Student } from "@/database/models/Student"
 
 
+
 export default function ClassPage() {
     const [className, setClassName] = useState("");
     const [studentName, setStudentName] = useState("");
@@ -65,7 +66,7 @@ const AddStudentToClass = async (e: FormEvent): Promise<void> => {
             },
             body: JSON.stringify({
                 name: className,
-                student: studentName
+                student: studentName,
             }),
         });
 
@@ -92,9 +93,9 @@ const AddStudentToClass = async (e: FormEvent): Promise<void> => {
         <form>
             <label>
                 Lägg till elever:
-                <input type="text" value={className} onChange={(e) => setStudentName(e.target.value)} />
+                <input type="text" value={studentName} onChange={(e) => setStudentName(e.target.value)} />
             </label>
-            <button type="submit" onClick={AddStudentToClass}>Skapa klass</button>
+            <button type="submit" onClick={AddStudentToClass}>Lägg till elev</button>
         </form>
         </div>
         :<form>
