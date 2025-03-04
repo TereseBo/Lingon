@@ -15,7 +15,8 @@ const StudentSchema = new mongoose.Schema<Student>({
         maxlength: [60, "Name cannot be more than 60 characters"],
     },
     result:{
-        type: null
+        type: mongoose.Schema.Types.Mixed,
+        default: null
     }
 
 });
