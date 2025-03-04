@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 //TODO:Update model to allow for tracking of student results
 
 export interface Student extends mongoose.Document {
+    _id: string,
     name:string,
     result:null
 
