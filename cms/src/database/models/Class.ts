@@ -21,6 +21,10 @@ const ClassSchema = new mongoose.Schema<Class>({
     },
     teachers: {
         type: [{ type: mongoose.Types.ObjectId, ref: "Employee" }],
+    },
+    OrganizationId: {
+        type: String,
+        required: true
     }
 });
 
