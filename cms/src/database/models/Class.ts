@@ -4,9 +4,10 @@ import {Student} from "./Student"
 
 
 export interface Class extends mongoose.Document {
-    name: string;
-    students: Student[] | null
-    teachers: Employee[] | null
+    name: string,
+    students: Student[] | null,
+    teachers: Employee[] | null,
+    OrganizationId: string
 }
 
 const ClassSchema = new mongoose.Schema<Class>({
