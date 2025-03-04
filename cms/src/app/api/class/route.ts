@@ -48,7 +48,10 @@ export async function POST(
             firstName: user.firstName || "Unknown", 
             lastName: user.lastName || "User" 
         });
+        console.log("New Teacher: ", newTeacher)
         const dbResponse = await Class.create({ name: name, teacher: {newTeacher}, OrganizationId: orgId });
+        console.log("DB Response: ", dbResponse)
+    
         return NextResponse.json(dbResponse, { status: 201 });
     } catch (error) {
         console.log(error)
@@ -62,13 +65,24 @@ export async function PATCH(
     try {
         await dbConnect()
         const { name, student } = await req.json()
+        console.log("Name and student:", name, student)
         const newStudent = await Student.create({ name: student });
+        console.log("Newstudent:", newStudent)
         const dbResponse = await Class.updateOne({ name: name
+        
         },
             { $addToSet: { students: newStudent._id }
          });
-         
-        return NextResponse.json(dbResponse, { status: 200 });
+
+         if (!dbResponse) {
+            return NextResponse.json(null, { status: 503 });
+        } else {
+            const updatedClass = await Class.findOne({
+                name: name
+            });
+
+        return NextResponse.json(updatedClass, { status: 200 });
+        }
     } catch (error) {
         console.log(error)
         return NextResponse.json(null, { status: 500 });
