@@ -4,18 +4,22 @@ import Class from '@/database/models/Class'
 import { NextRequest } from 'next/server'
 
 
-export async function GET(req: NextRequest) {
-    const { searchParams } = new URL(req.url);
-    const name = searchParams.get('name');
-    console.log(name);
+export async function GET(req: NextRequest) : Promise<NextResponse> {
+    const url = new URL(req.url);
+    const name = url.pathname.split("/").pop();
+
+    console.log("Name of params:", name);
     try {
         await dbConnect()
-        const dbResponse: typeof Class[] = await Class.find({name});
-
-        if (!dbResponse) {
+        const classinformation = await Class.findOne({name})
+        .populate('students')
+        .populate('teachers')
+        if (!classinformation) {
             return NextResponse.json(null, { status: 503 });
         } else {
-            return NextResponse.json(dbResponse, { status: 200 });
+
+        
+            return NextResponse.json(classinformation, { status: 200 });
         }
 
     } catch (error) {
