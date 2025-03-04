@@ -1,9 +1,10 @@
 "use client"
 import { useEffect, useState } from "react";
+import { Class } from "@/database/models/Class";
 
 export default function ClassPage() {
 
-    const [classes, setClasses]= useState(undefined)
+    const [classes, setClasses] = useState<Class[] | undefined>(undefined)
     useEffect(() => {
 
         async function getClassesForUser() {
@@ -26,7 +27,7 @@ export default function ClassPage() {
         getClassesForUser()
        
 
-    }, )
+    },[] )
 
 
 
@@ -35,7 +36,13 @@ export default function ClassPage() {
             Welcome to class page!!
             {/* Im thinking you see all classes here, and then you have the option to edit/delete them */}
             {
-                classes===undefined?<div>Nej</div>:<div>Yay</div>
+                classes ? classes.map((classItem, index) => {
+                    return (
+                        <div key={index}>
+                            <h2>{classItem.name}</h2>
+                        </div>
+                    )
+                }) : <p>Loading...</p>
             }
 
             Do you want to add a class? <a href="/class/create">Click here</a>
