@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/database/dbConnect";
 import Class from "@/database/models/Class";
+import Student from "@/database/models/Student";
+import Employee from "@/database/models/Employee";
+import { auth, clerkClient } from '@clerk/nextjs/server'
+
 
 
 export async function GET(
@@ -29,7 +33,22 @@ export async function POST(
     try {
         await dbConnect()
         const { name } = await req.json()
-        const dbResponse = await Class.create({ name: name });
+        const { userId, orgId } = await auth()
+        if (!userId) {
+            return new NextResponse('Unauthorized', { status: 401 })
+          }
+        
+          const client = await clerkClient()
+          const user = await client.users.getUser(userId)
+          if (!user) {
+            return new NextResponse('Unauthorized', { status: 401 })
+          }
+        console.log("User object: ", user)
+        const newTeacher = await Employee.create({ 
+            firstName: user.firstName || "Unknown", 
+            lastName: user.lastName || "User" 
+        });
+        const dbResponse = await Class.create({ name: name, teacher: {newTeacher}, OrganizationId: orgId });
         return NextResponse.json(dbResponse, { status: 201 });
     } catch (error) {
         console.log(error)
@@ -43,11 +62,12 @@ export async function PATCH(
     try {
         await dbConnect()
         const { name, student } = await req.json()
+        const newStudent = await Student.create({ name: student });
         const dbResponse = await Class.updateOne({ name: name
         },
-            { $addToSet: { students: { name:student } }
-
+            { $addToSet: { students: newStudent._id }
          });
+         
         return NextResponse.json(dbResponse, { status: 200 });
     } catch (error) {
         console.log(error)
