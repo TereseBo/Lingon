@@ -1,5 +1,5 @@
 "use client"
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent } from "react";
 import  { Class }  from "@/database/models/Class"
 import { Student } from "@/database/models/Student"
 
@@ -11,8 +11,7 @@ export default function ClassPage() {
     const [theClass, setTheClass] = useState< Class | null >(null);
     const [newClassName, setNewClassName] = useState("");
 
-useEffect(() => {
-    async function getNewClassForUser() {
+const getNewClassForUser = async () => {
         try {
             const apiRes = await fetch(`/api/class/${newClassName}`, {
                 method: "GET",
@@ -21,6 +20,7 @@ useEffect(() => {
             if (apiRes.ok) {
                 const data = await apiRes.json();
                 setTheClass(data); 
+                console.log("The class-data:", data);
             }
         } catch (error) {
 
@@ -28,8 +28,6 @@ useEffect(() => {
         }
     }
 
-    getNewClassForUser()
-}, [newClassName])
 
 const addNewClass = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
@@ -48,6 +46,7 @@ const addNewClass = async (e: FormEvent): Promise<void> => {
             const data = await apiRes.json();
             setNewClassName(data.name);
             setClassName("");
+            getNewClassForUser();
         }
     } catch (error) {
 
@@ -57,6 +56,7 @@ const addNewClass = async (e: FormEvent): Promise<void> => {
 }
 
 const AddStudentToClass = async (e: FormEvent): Promise<void> => {
+    console.log("Add student to class")
     e.preventDefault();
     try {
         const apiRes = await fetch(`/api/class/`, {
@@ -65,14 +65,15 @@ const AddStudentToClass = async (e: FormEvent): Promise<void> => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                name: className,
+                name: newClassName,
                 student: studentName,
             }),
         });
 
         if (apiRes.ok) {
             const data = await apiRes.json();
-            setNewClassName(data.className);
+            setNewClassName(data.name);
+            getNewClassForUser();
             setStudentName("");
 
         }
@@ -84,7 +85,7 @@ const AddStudentToClass = async (e: FormEvent): Promise<void> => {
 
     return (
        <div>
-        { newClassName && theClass ? <div>{theClass.name}
+        { newClassName && theClass ? <div><h1>{newClassName}</h1>
         <ul>
             {theClass.students && theClass.students.map((student:Student, index: number) => (
                 <li key={index}>{student.name}</li>
