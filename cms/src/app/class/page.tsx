@@ -5,6 +5,7 @@ import { Class } from "@/database/models/Class";
 export default function ClassPage() {
 
     const [classes, setClasses] = useState<Class[] | undefined>(undefined)
+
     useEffect(() => {
 
         async function getClassesForUser() {
@@ -14,9 +15,9 @@ export default function ClassPage() {
                 });
     
                 if (apiRes.ok) {
-                    const data = await apiRes.json(); // Parse JSON data */
+                    const data = await apiRes.json();
     
-                    setClasses(data); // Update state with parsed data
+                    setClasses(data as Class[]); 
                 }
             } catch (error) {
                 //TODO: Handle error
@@ -29,17 +30,39 @@ export default function ClassPage() {
 
     },[] )
 
+const EraseTheClass = async (classId: string): Promise<void> => {
+    
+    try {
+        const apiRes = await fetch(`/api/class/${classId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: classId,
+            }),
+        });
 
+        if (apiRes.ok) {
+            const data = await apiRes.json();
+            console.log("Deleted class:", data);
+            setClasses(classes?.filter((classItem) => classItem._id !== classId));
+            
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
     return (
         <div>
             Welcome to class page!!
             {/* Im thinking you see all classes here, and then you have the option to edit/delete them */}
             {
-                classes ? classes.map((classItem, index) => {
+                classes ? classes.map((classItem: Class, index) => {
                     return (
                         <div key={index}>
-                            <h2>{classItem.name}</h2>
+                            <h2>{classItem.name}</h2><button>Edit</button><button onClick={() => EraseTheClass(classItem._id as string)}>Erase</button>
                         </div>
                     )
                 }) : <p>Loading...</p>

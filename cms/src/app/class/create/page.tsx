@@ -20,7 +20,6 @@ const getNewClassForUser = async () => {
             if (apiRes.ok) {
                 const data = await apiRes.json();
                 setTheClass(data); 
-                console.log("The class-data:", data);
             }
         } catch (error) {
 
