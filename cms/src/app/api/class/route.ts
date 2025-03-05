@@ -34,6 +34,9 @@ export async function POST(
         await dbConnect()
         const { name } = await req.json()
         const { userId, orgId } = await auth()
+        if (!orgId) {
+            return new NextResponse('Unauthorized', { status: 401 })
+          }
         if (!userId) {
             return new NextResponse('Unauthorized', { status: 401 })
           }
@@ -43,14 +46,14 @@ export async function POST(
           if (!user) {
             return new NextResponse('Unauthorized', { status: 401 })
           }
-        console.log("User object: ", user)
+
         const newTeacher = await Employee.create({ 
             firstName: user.firstName || "Unknown", 
             lastName: user.lastName || "User" 
         });
-        console.log("New Teacher: ", newTeacher)
+
         const dbResponse = await Class.create({ name: name, teacher: {newTeacher}, OrganizationId: orgId });
-        console.log("DB Response: ", dbResponse)
+
     
         return NextResponse.json(dbResponse, { status: 201 });
     } catch (error) {
@@ -65,9 +68,7 @@ export async function PATCH(
     try {
         await dbConnect()
         const { name, student } = await req.json()
-        console.log("Name and student:", name, student)
         const newStudent = await Student.create({ name: student });
-        console.log("Newstudent:", newStudent)
         const dbResponse = await Class.updateOne({ name: name
         
         },
