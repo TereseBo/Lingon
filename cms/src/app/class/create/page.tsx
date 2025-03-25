@@ -8,7 +8,7 @@ import { Student } from "@/database/models/Student"
 export default function ClassPage() {
     const [className, setClassName] = useState("");
     const [studentName, setStudentName] = useState("");
-    const [theClass, setTheClass] = useState< Class | null >(null);
+    const [theClass, setTheClass] = useState< Class & { students: Student[] } | null >(null);
     const [newClassName, setNewClassName] = useState("");
 
 const getNewClassForUser = async () => {
