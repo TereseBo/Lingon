@@ -8,12 +8,12 @@ export async function GET(req: NextRequest) : Promise<NextResponse> {
     const url = new URL(req.url);
     const name = url.pathname.split("/").pop();
 
-    console.log("Name of params:", name);
     try {
         await dbConnect()
         const classinformation = await Class.findOne({name})
         .populate('students')
         .populate('teachers')
+        .exec()
         if (!classinformation) {
             return NextResponse.json(null, { status: 503 });
         } else {
