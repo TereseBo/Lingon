@@ -8,7 +8,7 @@ export default function ClassPage() {
 
     const [theClass, setTheClass] = useState<Class[] | undefined>(undefined)
     const params = useParams<{ tag: string; name: string }>();
-    
+
     useEffect(() => {
 
         async function getClassesForUser() {
@@ -31,7 +31,7 @@ export default function ClassPage() {
         getClassesForUser()
        
 
-    },[] )
+    },[params.name] )
 
 const EraseTheClass = async (classId: string): Promise<void> => {
     
@@ -55,7 +55,7 @@ const EraseTheClass = async (classId: string): Promise<void> => {
         console.log(error);
     }
 }
-
+//TODO: Add edit functionality
     return (
         <div>
   {theClass && (
