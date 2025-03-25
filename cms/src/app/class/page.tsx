@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react";
 import { Class } from "@/database/models/Class";
+import Link from "next/link";
 
 export default function ClassPage() {
 
@@ -54,6 +55,7 @@ const EraseTheClass = async (classId: string): Promise<void> => {
     }
 }
 
+//TODO: Add edit functionality
     return (
         <div>
             Welcome to class page!!
@@ -62,7 +64,8 @@ const EraseTheClass = async (classId: string): Promise<void> => {
                 classes ? classes.map((classItem: Class, index) => {
                     return (
                         <div key={index}>
-                            <h2>{classItem.name}</h2><button>Edit</button><button onClick={() => EraseTheClass(classItem._id as string)}>Erase</button>
+                            
+                            <h2>{classItem.name}</h2><button><Link href={`/class/${classItem.name}`}>Edit</Link></button><button onClick={() => EraseTheClass(classItem._id as string)}>Erase</button>
                         </div>
                     )
                 }) : <p>Loading...</p>
