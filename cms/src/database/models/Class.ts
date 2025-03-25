@@ -1,13 +1,12 @@
+import { Student } from "./Student";
+import { Employee } from "./Employee";
 import mongoose from "mongoose";
-import { Employee } from "./Employee"
-import {Student} from "./Student"
-
 
 export interface Class extends mongoose.Document {
-    name: string,
-    students: Student[] | null,
-    teachers: Employee[] | null,
-    OrganizationId: string
+  name: string;
+  students: mongoose.Types.ObjectId[] | Student[];
+  teachers: mongoose.Types.ObjectId[] | Employee[];
+  OrganizationId: string;
 }
 
 const ClassSchema = new mongoose.Schema<Class>({
