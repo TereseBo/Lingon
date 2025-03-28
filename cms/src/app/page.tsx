@@ -1,15 +1,15 @@
 "use client"
 import { useState } from "react";
-import { Pet } from "@/database/models/Pet"
+import { Employee } from "@/database/models/Employee"
+import {Menu} from "@/components/menu"
 
 export default function Home() {
-    const [petResult, setPetResult] = useState<Pet[] | null>(null);
+    const [petResult, setPetResult] = useState<Employee[] | null>(null);
     async function tryDatabase() {
         try {
             const apiRes = await fetch(`/api`, {
                 method: "GET",
             });
-            console.log(apiRes)
 
             if (apiRes.ok) {
                 const data = await apiRes.json(); // Parse JSON data */
@@ -17,16 +17,18 @@ export default function Home() {
                 setPetResult(data); // Update state with parsed data
             }
         } catch (error) {
+            //TODO: Handle error
             console.log(error);
         }
     }
 
     return (
         <div>
+            <Menu/>
             <button onClick={tryDatabase}>Click me for fetch</button>
             {petResult ? (
-                petResult.map((pet, index) => (
-                    <div key={index}>{pet.name || "Unknown Name"}</div>
+                petResult.map((employee, index) => (
+                    <div key={index}>{employee.firstName || "Unknown Name"}</div>
                 ))
             ) : (
                 <div>Loading...</div>

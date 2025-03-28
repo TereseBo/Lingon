@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "cms": "cd cms && npm run dev"
+  },
   "dependencies": {
     "@clerk/nextjs": "^6.5.1",
     "mongodb": "^6.11.0",
