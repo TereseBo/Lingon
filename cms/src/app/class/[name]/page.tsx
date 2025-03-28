@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 
 export default function ClassPage() {
 
-    const [theClass, setTheClass] = useState<Class[] | undefined>(undefined)
+    const [theClass, setTheClass] = useState<Class | undefined>(undefined)
     const [newStudentName, setNewStudentName] = useState<string>("");
     const [update, setUpdate] = useState<boolean>(false);
     const params = useParams<{ tag: string; name: string }>();
@@ -22,7 +22,7 @@ export default function ClassPage() {
                 if (apiRes.ok) {
                     const data = await apiRes.json();
     
-                    setTheClass(data as Class[]); 
+                    setTheClass(data as Class); 
                 }
             } catch (error) {
                 //TODO: Handle error
