@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Class } from "@/database/models/Class";
 import Link from "next/link";
+import { Button } from "@heroui/react";
 
 export default function ClassPage() {
 
@@ -65,7 +66,17 @@ const EraseTheClass = async (classId: string): Promise<void> => {
                     return (
                         <div key={index}>
                             
-                            <h2>{classItem.name}</h2><button><Link href={`/class/${classItem.name}`}>Edit</Link></button><button onClick={() => EraseTheClass(classItem._id as string)}>Erase</button>
+                            <h2>{classItem.name}</h2>
+                            <Button
+                                variant="solid"
+                                size="sm"
+                                color="primary">
+                                
+                                <Link href={`/class/${classItem.name}`}>Edit</Link>
+                                </Button>
+                                <Button variant="solid"
+                                size="sm"
+                                color="danger" onPress={() => EraseTheClass(classItem._id as string)}>Erase</Button>
                         </div>
                     )
                 }) : <p>Loading...</p>

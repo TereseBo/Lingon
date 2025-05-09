@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Employee } from "@/database/models/Employee"
 import {Menu} from "@/components/menu"
 
+
 export default function Home() {
     const [petResult, setPetResult] = useState<Employee[] | null>(null);
     async function tryDatabase() {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import { Providers } from "./providers";
 
 //components
 import { MainHeader } from "@/components/header";
@@ -17,15 +18,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-    <html lang="en">
-      <body
-        className={`antialiased`}
-      >
-        <MainHeader/>
-        {children}
-      </body>
-    </html>
-    </ClerkProvider>
+      <ClerkProvider>
+        <html lang="en">
+          <body
+            className={`antialiased`}>
+           <Providers>
+              <MainHeader/>
+              {children}
+            </Providers>
+          </body>
+        </html>
+      </ClerkProvider>
+    
   );
 }
